@@ -50,15 +50,20 @@ struct StoryListView: View {
             Circle()
                 .strokeBorder(story.isSeen ? Color.gray : Color.blue, lineWidth: 3)
                 .background(
-                    AsyncImage(
-                        url: URL(string: story.imageURL))
-                    .frame(width: 84 , height: 84)
-                    .clipShape(Circle())
-                    .scaledToFit()
+                    AsyncImage(url: URL(string: story.imageURL), content: { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    }, placeholder: {
+                        EmptyView()
+                    }).clipShape(
+                        Circle()
+                    )
                 )
                 .frame(width: 90, height: 90)
         }
         .buttonStyle(.plain)
+        .frame(width: 90, height: 90)
         .onAppear {
             if story == viewModel.stories.last {
                 Task { @MainActor
